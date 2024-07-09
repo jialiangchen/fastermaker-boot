@@ -32,7 +32,7 @@ fastermaker-boot
 		├── form                # 前端表单对象
 		├── query               # 前端查询参数对象
 		├── vo                  # 视图对象
-	├── tool		# 系统工具模块
+	├── tool		        # 系统工具模块
     ├── filter                          # 过滤器
     ├── plugin                          # 插件集成
     ├── security                        # Spring Security 工具类     
