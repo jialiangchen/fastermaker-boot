@@ -19,8 +19,8 @@ fastermaker-boot
 ├── src                                 # 源码目录
     ├── common                          # 公共模块
     ├── config                          # 自动装配配置
-    ├── modules   			# 功能模块
-        ├── system			# 系统管理模块
+    ├── modules                         # 功能模块
+        ├── system                      # 系统管理模块
 	    ├── controller              # 控制层
 	    ├── converter               # MapStruct转换工具
 	    ├── mapper                  # 数据库访问层
@@ -32,7 +32,7 @@ fastermaker-boot
 	        ├── form                # 前端表单对象
 	        ├── query               # 前端查询参数对象
 	        ├── vo                  # 视图对象
-	├── tool		        # 系统工具模块
+        ├── tool                        # 系统工具模块
     ├── filter                          # 过滤器
     ├── plugin                          # 插件集成
     ├── security                        # Spring Security 工具类     
