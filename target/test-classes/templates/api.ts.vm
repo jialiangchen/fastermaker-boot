@@ -1,0 +1,165 @@
+import request from "@/utils/request";
+
+const ${upperCaseEntity}_BASE_URL = "/api/v1/${firstCharLowerCaseEntity}";
+
+class ${entity}API {
+    /**
+     * 获取$!{table.comment}列表
+     *
+     * @param queryParams 查询参数（可选）
+     * @returns $!{table.comment}树形表格数据
+     */
+    static listPage(queryParams?: ${entity}PageQuery) {
+        return request<any,PageResult<${entity}PageVO[]>>({
+            url: `${${upperCaseEntity}_BASE_URL}/listPage`,
+            method: "post",
+            data: queryParams,
+        });
+    }
+
+
+    /**
+     * 获取$!{table.comment}详情表单数据
+     *
+     * @param id $!{table.comment}ID
+     * @returns $!{table.comment}详情表单数据
+     */
+    static getFormData(id: number) {
+        return request<any, ${entity}Form>({
+            url: `${${upperCaseEntity}_BASE_URL}/getFormData/${id}`,
+            method: "get",
+        });
+    }
+
+    /**
+     * 新增$!{table.comment}
+     *
+     * @param data $!{table.comment}表单数据
+     * @returns 请求结果
+     */
+    static save(data: ${entity}Form) {
+        return request({
+            url: `${${upperCaseEntity}_BASE_URL}/save`,
+            method: "post",
+            data: data,
+        });
+    }
+
+    /**
+     * 修改$!{table.comment}
+     *
+     * @param data $!{table.comment}表单数据
+     * @returns 请求结果
+     */
+    static update(data: ${entity}Form) {
+        return request({
+            url: `${${upperCaseEntity}_BASE_URL}/update`,
+            method: "post",
+            data: data,
+        });
+    }
+
+    /**
+     * 删除$!{table.comment}
+     *
+     * @param ids $!{table.comment}ID，多个以英文逗号(,)分隔
+     * @returns 请求结果
+     */
+    static delete(ids: string) {
+        return request({
+            url: `${${upperCaseEntity}_BASE_URL}/delete/${ids}`,
+            method: "get",
+        });
+    }
+}
+
+export default ${entity}API;
+
+/** $!{table.comment}查询参数 */
+export interface ${entity}PageQuery extends PageQuery {
+    /** 搜索关键字 */
+    keywords?: string;
+    /** 开始时间 */
+    startTime?: string;
+    /** 结束时间 */
+    endTime?: string;
+#foreach($field in ${table.fields})
+    #if(!${field.propertyName.equals("id")} && !${field.propertyName.equals("createTime")} && !${field.propertyName.equals("updateTime")} && !${field.propertyName.equals("createBy")} && !${field.propertyName.equals("updateBy")} && !${field.propertyName.equals("isDeleted")})
+    /** ${field.comment} */
+    #if(${field.propertyType.equals("Integer")})
+    ${field.propertyName}?: number;
+    #end
+    #if(${field.propertyType.equals("Boolean")})
+    ${field.propertyName}?: boolean;
+    #end
+    #if(${field.propertyType.equals("String")})
+    ${field.propertyName}?: string;
+    #end
+    #if(${field.propertyType.equals("Date")})
+    ${field.propertyName}?: Date;
+    #end
+    #end
+#end
+}
+
+/** $!{table.comment}类型 */
+export interface ${entity}PageVO {
+    /**ID */
+    id?: number;
+    /** 创建时间 */
+    createTime?: Date;
+    /** 修改时间 */
+    updateTime?: Date;
+    /** 创建人 */
+    createBy?: number;
+    /** 更新人 */
+    updateBy?: number;
+#foreach($field in ${table.fields})
+    #if(!${field.propertyName.equals("id")} && !${field.propertyName.equals("createTime")} && !${field.propertyName.equals("updateTime")} && !${field.propertyName.equals("createBy")} && !${field.propertyName.equals("updateBy")} && !${field.propertyName.equals("isDeleted")})
+    /** ${field.comment} */
+    #if(${field.propertyType.equals("Integer")})
+    ${field.propertyName}?: number;
+    #end
+    #if(${field.propertyType.equals("Boolean")})
+    ${field.propertyName}?: boolean;
+    #end
+    #if(${field.propertyType.equals("String")})
+    ${field.propertyName}?: string;
+    #end
+    #if(${field.propertyType.equals("Date")})
+    ${field.propertyName}?: Date;
+    #end
+    #end
+ #end
+}
+
+/** $!{table.comment}表单类型 */
+export interface ${entity}Form {
+    /** ID(新增不填) */
+    id?: number;
+    /** 创建时间 */
+    createTime?: Date;
+    /** 修改时间 */
+    updateTime?: Date;
+    /** 创建人 */
+    createBy?: number;
+    /** 更新人 */
+    updateBy?: number;
+    #foreach($field in ${table.fields})
+    #if(!${field.propertyName.equals("id")} && !${field.propertyName.equals("createTime")} && !${field.propertyName.equals("updateTime")} && !${field.propertyName.equals("createBy")} && !${field.propertyName.equals("updateBy")} && !${field.propertyName.equals("isDeleted")})
+    /** ${field.comment} */
+    #if(${field.propertyType.equals("Integer")})
+    ${field.propertyName}?: number;
+    #end
+    #if(${field.propertyType.equals("Boolean")})
+    ${field.propertyName}?: boolean;
+    #end
+    #if(${field.propertyType.equals("String")})
+    ${field.propertyName}?: string;
+    #end
+    #if(${field.propertyType.equals("Date")})
+    ${field.propertyName}?: Date;
+    #end
+    #end
+    #end
+}

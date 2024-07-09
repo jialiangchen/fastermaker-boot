@@ -1,0 +1,12 @@
+-- 菜单SQL
+#set($idList=${menuId}+1)
+#set($idSave=${menuId}+2)
+#set($idUpdate=${menuId}+3)
+#set($idDelete=${menuId}+4)
+insert into
+`sys_menu` (`id`,`parent_id`,`tree_path`,`name`,`type`,`route_name`,`route_path`,`component`,`perm`,`always_show`,`keep_alive`,`visible`,`sort`,`icon`,`redirect`,`create_time`,`update_time`,`params`) values
+(${menuId},1809897379755364354,'0,1809897379755364354','$!{table.comment}',1,'${entity}','${firstCharLowerCaseEntity}','${module}/${firstCharLowerCaseEntity}/index',NULL,NULL,NULL,1,1,'system',NULL,'${date} 00:00:00','${date} 00:00:00',NULL),
+($idList,${menuId},'0,1809897379755364354,${menuId}','$!{table.comment}查询',4,NULL,'',NULL,'${module}:${firstCharLowerCaseEntity}:list',0,0,1,0,'',NULL,'${date} 00:00:00','${date} 00:00:00',NULL),
+($idSave,${menuId},'0,1809897379755364354,${menuId}','$!{table.comment}新增',4,NULL,'',NULL,'${module}:${firstCharLowerCaseEntity}:save',NULL,NULL,1,1,'','','${date} 00:00:00','${date} 00:00:00',NULL),
+($idUpdate,${menuId},'0,1809897379755364354,${menuId}','$!{table.comment}编辑',4,NULL,'',NULL,'${module}:${firstCharLowerCaseEntity}:update',NULL,NULL,1,2,'','','${date} 00:00:00','${date} 00:00:00',NULL),
+($idDelete,${menuId},'0,1809897379755364354,${menuId}','$!{table.comment}删除',4,NULL,'',NULL,'${module}:${firstCharLowerCaseEntity}:delete',NULL,NULL,1,3,'','','${date} 00:00:00','${date} 00:00:00',NULL);

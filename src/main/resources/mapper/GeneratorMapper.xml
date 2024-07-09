@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fastermaker.modules.tool.mapper.GeneratorMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fastermaker.modules.tool.model.entity.Generator">
+        <id column="id" property="id" />
+        <result column="package_name" property="packageName" />
+        <result column="module_name" property="moduleName" />
+        <result column="table_name" property="tableName" />
+        <result column="table_prefix" property="tablePrefix" />
+        <result column="author" property="author" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_deleted" property="isDeleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, package_name, module_name, table_name, table_prefix, author, create_by, update_by, create_time, update_time, is_deleted
+    </sql>
+
+
+    <!-- 代码生成分页列表 -->
+    <select id="listPage" resultType="com.fastermaker.modules.tool.model.bo.GeneratorBO">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            tool_generator
+        <where>
+            is_deleted = 0
+            <if test="queryParams.packageName != null">
+                AND package_name = #{queryParams.packageName}
+            </if>
+            <if test="queryParams.moduleName != null">
+                AND module_name = #{queryParams.moduleName}
+            </if>
+            <if test="queryParams.tableName != null">
+                AND table_name = #{queryParams.tableName}
+            </if>
+            <if test="queryParams.tablePrefix != null">
+                AND table_prefix = #{queryParams.tablePrefix}
+            </if>
+            <if test="queryParams.author != null">
+                AND author = #{queryParams.author}
+            </if>
+            <if test="queryParams.startTime != null">
+                AND create_time &gt;= #{queryParams.startTime}
+            </if>
+            <if test="queryParams.endTime != null">
+                AND create_time &lt;= #{queryParams.endTime}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

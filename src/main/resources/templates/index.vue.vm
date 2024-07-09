@@ -1,0 +1,288 @@
+<template>
+  <div class="app-container">
+    <div class="search-container">
+      <el-form ref="queryFormRef" :model="queryParams" :inline="true">
+#set($menuCount=0)
+#foreach($field in ${table.fields})
+  #if(!${field.propertyName.equals("id")} && !${field.propertyName.equals("createTime")} && !${field.propertyName.equals("updateTime")} && !${field.propertyName.equals("createBy")} && !${field.propertyName.equals("updateBy")} && !${field.propertyName.equals("isDeleted")})
+        <el-form-item #if($menuCount>8) v-show="collapse" #end label="${field.comment}" prop="${field.propertyName}">
+          <el-input
+              v-model="queryParams.${field.propertyName}"
+              placeholder="${field.comment}"
+          />
+        </el-form-item>
+    #set($menuCount=${menuCount}+1)
+  #end
+#end
+        <el-form-item label="创建时间">
+          <el-date-picker
+              class="!w-[230px]"
+              v-model="dateTimeRange"
+              type="daterange"
+              range-separator="~"
+              start-placeholder="开始时间"
+              end-placeholder="截止时间"
+              value-format="YYYY-MM-DD"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button class="filter-item" type="primary" @click="handleQuery">
+            <i-ep-search />
+            搜索
+          </el-button>
+          <el-button @click="handleResetQuery">
+            <i-ep-refresh />重置
+          </el-button>
+        #if($menuCount>8)
+          <a style="margin-left: 15px;color: #409EFC" @click="toggleCollapse">
+            {{ collapse ? '收起' : '更多条件' }}
+            <i-ep-arrowDown color="#409EFC" v-show="!collapse" />
+            <i-ep-arrowUp color="#409EFC" v-show="collapse"/>
+          </a>
+        #end
+        </el-form-item>
+      </el-form>
+    </div>
+
+    <el-card shadow="never" class="table-container">
+      <template #header>
+        <el-button
+            v-hasPerm="['${module}:${firstCharLowerCaseEntity}:save']"
+            type="success"
+            @click="handleOpenDialog(0, undefined)"
+        ><i-ep-plus />新增</el-button>
+        <el-button
+            v-hasPerm="['${module}:${firstCharLowerCaseEntity}:delete']"
+            type="danger"
+            :disabled="ids.length === 0"
+            @click="handleDelete()"
+        ><i-ep-delete />删除
+        </el-button>
+      </template>
+
+      <el-table
+          v-loading="loading"
+          :data="pageData"
+          row-key="id"
+          @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection" width="55" align="center" />
+        #foreach($field in ${table.fields})
+        #if(!${field.propertyName.equals("id")} && !${field.propertyName.equals("createBy")} && !${field.propertyName.equals("updateBy")} && !${field.propertyName.equals("isDeleted")})
+        <el-table-column prop="${field.propertyName}" label="${field.comment}" width="200" />
+        #end
+        #end
+        <el-table-column label="操作" fixed="right" align="left" width="200">
+          <template #default="scope">
+            <el-button
+                v-hasPerm="['${module}:${firstCharLowerCaseEntity}:update']"
+                type="primary"
+                link
+                size="small"
+                @click.stop="handleOpenDialog(scope.row.id)"
+            ><i-ep-edit />编辑
+            </el-button>
+            <el-button
+                v-hasPerm="['${module}:${firstCharLowerCaseEntity}:delete']"
+                type="danger"
+                link
+                size="small"
+                @click.stop="handleDelete(scope.row.id)"
+            >
+              <i-ep-delete />删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination
+              v-if="total > 0"
+              v-model:total="total"
+              v-model:page="queryParams.pageNum"
+              v-model:limit="queryParams.pageSize"
+              @pagination="handleQuery"
+      />
+    </el-card>
+
+    <el-dialog
+        v-model="dialog.visible"
+        :title="dialog.title"
+        width="600px"
+        @closed="handleCloseDialog"
+    >
+      <el-form
+          ref="${firstCharLowerCaseEntity}FormRef"
+          :model="formData"
+          :rules="rules"
+          label-width="80px"
+      >
+      #foreach($field in ${table.fields})
+        #if(!${field.propertyName.equals("id")} && !${field.propertyName.equals("createBy")} && !${field.propertyName.equals("updateBy")} && !${field.propertyName.equals("createTime")} && !${field.propertyName.equals("updateTime")} && !${field.propertyName.equals("isDeleted")})
+        <el-form-item label="${field.comment}" prop="${field.propertyName}">
+          <el-input v-model="formData.${field.propertyName}" #if(!${field.metaInfo.nullable}) placeholder="请输入${field.comment}" #end />
+        </el-form-item>
+        #end
+       #end
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="handleSubmit" :loading="loading"> 确 定 </el-button>
+          <el-button @click="handleCloseDialog"> 取 消 </el-button>
+        </div>
+      </template>
+    </el-dialog>
+  </div>
+</template>
+
+<script setup lang="ts">
+  defineOptions({
+    name: "${entity}",
+    inheritAttrs: false,
+  });
+
+  import ${entity}API, { ${entity}PageVO, ${entity}Form, ${entity}PageQuery } from "@/api/${firstCharLowerCaseEntity}";
+
+  const queryFormRef = ref(ElForm);
+  const ${firstCharLowerCaseEntity}FormRef = ref(ElForm);
+
+  const loading = ref(false);
+  const ids = ref<number[]>([]);
+  const dialog = reactive({
+    title: "",
+    visible: false,
+  });
+  const collapse=ref(false);
+  const queryParams = reactive<${entity}PageQuery>({});
+  const pageData = ref<${entity}PageVO[]>();
+  const total = ref(0);
+
+  const formData = reactive<${entity}Form>({
+
+  });
+  const dateTimeRange = ref("");
+  watch(dateTimeRange, (newVal) => {
+    if (newVal) {
+      queryParams.startTime = newVal[0];
+      queryParams.endTime = newVal[1];
+    } else {
+      queryParams.startTime = undefined;
+      queryParams.endTime = undefined;
+    }
+  });
+  const rules = reactive({
+  #foreach($field in ${table.fields})
+  #if(!${field.keyFlag} && !${field.propertyName.equals("isDeleted")} && !${field.metaInfo.nullable})
+      ${field.propertyName}: [{ required: true, message: "${field.comment}不能为空", trigger: "blur" }],
+  #end
+  #end
+  });
+
+  /** 查询$!{table.comment} */
+  function handleQuery() {
+    loading.value = true;
+    ${entity}API.listPage(queryParams).then((data) => {
+       pageData.value = data.list;
+       total.value = data.total;
+    }).finally(() => {
+      loading.value = false;
+    });
+  }
+
+  /** 重置查询 */
+  function handleResetQuery() {
+    queryFormRef.value.resetFields();
+    dateTimeRange.value='';
+    queryParams.startTime = undefined;
+    queryParams.endTime = undefined;
+    handleQuery();
+  }
+
+  /** 行复选框选中记录选中ID集合 */
+  function handleSelectionChange(selection: any) {
+    ids.value = selection.map((item: any) => item.id);
+  }
+
+  /**
+   * 打开$!{table.comment}弹窗
+   *
+   * @param ${firstCharLowerCaseEntity}Id $!{table.comment}ID
+   */
+  async function handleOpenDialog(${firstCharLowerCaseEntity}Id?: number) {
+    dialog.visible = true;
+    if (${firstCharLowerCaseEntity}Id) {
+      dialog.title = "修改$!{table.comment}";
+      ${entity}API.getFormData(${firstCharLowerCaseEntity}Id).then((data) => {
+        Object.assign(formData, data);
+      });
+    } else {
+      dialog.title = "新增$!{table.comment}";
+    }
+  }
+
+  /** 提交$!{table.comment}表单 */
+  function handleSubmit() {
+    ${firstCharLowerCaseEntity}FormRef.value.validate((valid: any) => {
+      if (valid) {
+        loading.value = true;
+        const ${firstCharLowerCaseEntity}Id = formData.id;
+        if (${firstCharLowerCaseEntity}Id) {
+          ${entity}API.update(formData)
+              .then(() => {
+                ElMessage.success("修改成功");
+                handleCloseDialog();
+                handleQuery();
+              })
+              .finally(() => (loading.value = false));
+        } else {
+          ${entity}API.save(formData)
+              .then(() => {
+                ElMessage.success("新增成功");
+                handleCloseDialog();
+                handleQuery();
+              })
+              .finally(() => (loading.value = false));
+        }
+      }
+    });
+  }
+
+  /** 删除$!{table.comment} */
+  function handleDelete(${firstCharLowerCaseEntity}Id?: number) {
+    const ${firstCharLowerCaseEntity}Ids = [${firstCharLowerCaseEntity}Id || ids.value].join(",");
+    if (!${firstCharLowerCaseEntity}Ids) {
+      ElMessage.warning("请勾选删除项");
+      return;
+    }
+    ElMessageBox.confirm(`确认删除已选中的数据项?`, "警告", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    }).then(
+        () => {
+          loading.value = true;
+          ${entity}API.delete(${firstCharLowerCaseEntity}Ids)
+              .then(() => {
+                ElMessage.success("删除成功");
+                handleResetQuery();
+              })
+              .finally(() => (loading.value = false));
+        },
+        () => {
+          ElMessage.info("已取消删除");
+        }
+    );
+  }
+
+  /** 关闭弹窗 */
+  function handleCloseDialog() {
+    dialog.visible = false;
+    ${firstCharLowerCaseEntity}FormRef.value.resetFields();
+    ${firstCharLowerCaseEntity}FormRef.value.clearValidate();
+    formData.id = undefined;
+  }
+  function toggleCollapse(){
+    collapse.value = !collapse.value;
+  }
+  onMounted(() => {
+    handleQuery();
+  });
+</script>

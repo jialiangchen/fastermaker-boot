@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fastermaker.modules.system.mapper.ParamMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fastermaker.modules.system.model.entity.Param">
+        <id column="id" property="id" />
+        <result column="param_name" property="paramName" />
+        <result column="param_key" property="paramKey" />
+        <result column="param_value" property="paramValue" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_deleted" property="isDeleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, param_name, param_key, param_value, create_by, create_time, update_by, update_time, is_deleted
+    </sql>
+
+
+    <!-- 系统参数分页列表 -->
+    <select id="listPage" resultType="com.fastermaker.modules.system.model.bo.ParamBO">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            sys_param
+        <where>
+            is_deleted = 0
+            <if test="queryParams.paramName != null">
+                AND param_name = #{queryParams.paramName}
+            </if>
+            <if test="queryParams.paramKey != null">
+                AND param_key = #{queryParams.paramKey}
+            </if>
+            <if test="queryParams.paramValue != null">
+                AND param_value = #{queryParams.paramValue}
+            </if>
+            <if test="queryParams.startTime != null">
+                AND create_time &gt;= #{queryParams.startTime}
+            </if>
+            <if test="queryParams.endTime != null">
+                AND create_time &lt;= #{queryParams.endTime}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

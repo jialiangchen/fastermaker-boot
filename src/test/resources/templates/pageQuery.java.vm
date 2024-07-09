@@ -1,0 +1,39 @@
+package ${package.Parent}.model.query;
+
+import com.fastermaker.common.base.BasePageQuery;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+/**
+ * $!{table.comment}分页查询对象
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Schema(description ="$!{table.comment}分页查询对象")
+@Data
+public class ${entity}PageQuery extends BasePageQuery {
+
+    @Schema(description="关键字")
+    private String keywords;
+
+    @Schema(description="创建时间-开始时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String startTime;
+
+    @Schema(description="创建时间-结束时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String endTime;
+    #foreach($field in ${table.fields})
+
+    #if(!${field.propertyName.equals("id")} && !${field.propertyName.equals("createTime")} && !${field.propertyName.equals("updateTime")} && !${field.propertyName.equals("createBy")} && !${field.propertyName.equals("updateBy")} && !${field.propertyName.equals("isDeleted")})
+    #if(${field.keyFlag})
+        #set($keyPropertyName=${field.propertyName})
+    #end
+    #if("$!field.comment" != "")
+    @Schema(description = "${field.comment}")
+    #end
+    private ${field.propertyType} ${field.propertyName};
+    #end
+    #end
+}
