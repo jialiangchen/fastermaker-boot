@@ -64,7 +64,7 @@ public class ParamController {
         }
 
         @Operation(summary = "修改系统参数")
-        @PostMapping(value = "/update")
+        @PutMapping(value = "/update")
         @PreAuthorize("@permission.hasPerm('system:param:update')")
         @LogAnnotation( value = "修改系统参数",module = LogModuleEnum.OTHER)
         public Result update(@RequestBody @Validated(UpdateGroup.class) ParamForm formData) {
@@ -73,7 +73,7 @@ public class ParamController {
         }
 
         @Operation(summary = "删除系统参数")
-        @GetMapping("/delete/{ids}")
+        @DeleteMapping("/delete/{ids}")
         @PreAuthorize("@permission.hasPerm('system:param:delete')")
         @LogAnnotation( value = "删除系统参数",module = LogModuleEnum.OTHER)
         public Result delete(@Parameter(description = "系统参数ID，多个以英文逗号(,)分割") @PathVariable String ids) {

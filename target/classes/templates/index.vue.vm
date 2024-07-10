@@ -61,7 +61,7 @@
       </template>
 
       <el-table
-          v-loading="loading"
+          v-loading="queryloading"
           :data="pageData"
           row-key="id"
           @selection-change="handleSelectionChange"
@@ -125,7 +125,7 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="handleSubmit" :loading="loading"> 确 定 </el-button>
+          <el-button type="primary" @click="handleSubmit" :loading="submitloading"> 确 定 </el-button>
           <el-button @click="handleCloseDialog"> 取 消 </el-button>
         </div>
       </template>
@@ -144,7 +144,8 @@
   const queryFormRef = ref(ElForm);
   const ${firstCharLowerCaseEntity}FormRef = ref(ElForm);
 
-  const loading = ref(false);
+  const queryloading = ref(false);
+  const submitloading = ref(false);
   const ids = ref<number[]>([]);
   const dialog = reactive({
     title: "",
@@ -178,12 +179,12 @@
 
   /** 查询$!{table.comment} */
   function handleQuery() {
-    loading.value = true;
+    queryloading.value = true;
     ${entity}API.listPage(queryParams).then((data) => {
        pageData.value = data.list;
        total.value = data.total;
     }).finally(() => {
-      loading.value = false;
+      queryloading.value = false;
     });
   }
 
@@ -222,7 +223,7 @@
   function handleSubmit() {
     ${firstCharLowerCaseEntity}FormRef.value.validate((valid: any) => {
       if (valid) {
-        loading.value = true;
+        submitloading.value = true;
         const ${firstCharLowerCaseEntity}Id = formData.id;
         if (${firstCharLowerCaseEntity}Id) {
           ${entity}API.update(formData)
@@ -231,7 +232,7 @@
                 handleCloseDialog();
                 handleQuery();
               })
-              .finally(() => (loading.value = false));
+              .finally(() => (submitloading.value = false));
         } else {
           ${entity}API.save(formData)
               .then(() => {
@@ -239,7 +240,7 @@
                 handleCloseDialog();
                 handleQuery();
               })
-              .finally(() => (loading.value = false));
+              .finally(() => (submitloading.value = false));
         }
       }
     });
@@ -258,13 +259,13 @@
       type: "warning",
     }).then(
         () => {
-          loading.value = true;
+          queryloading.value = true;
           ${entity}API.delete(${firstCharLowerCaseEntity}Ids)
               .then(() => {
                 ElMessage.success("删除成功");
                 handleResetQuery();
               })
-              .finally(() => (loading.value = false));
+              .finally(() => (queryloading.value = false));
         },
         () => {
           ElMessage.info("已取消删除");

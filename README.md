@@ -3,7 +3,7 @@
 fastermaker-boot 是基于Spring Boot3 、Vue3 的一个代码简洁、结构清晰、开发高效、模块可扩展的单体项目的基础开发框架，包含代码生成器模块，适合初级开发者特别是大学生学习研究使用，也是中小型系统快速开发的利器。
 ![输入图片说明](%E7%B3%BB%E7%BB%9F%E5%9B%BE.png)
 
-- **开发技术**: JDK 17、Spring Boot3 、Vue3、Element-Plus、Spring Security、JWT 、Swagger、Validation等
+- **开发技术**: JDK 17、Spring Boot3 、MyBatis-Plus、Vue3、Element-Plus、Spring Security、JWT 、Swagger、Validation等
 
 - **功能模块**: 用户管理、角色管理、菜单管理、部门管理、字典管理、系统参数，系统日志、SQL监控、代码生成(包括前后端)。
 
@@ -59,5 +59,5 @@ fastermaker-boot
 
 ## 💖 加交流群
 
-如需关注项目最新动态，请Watch、Star项目，同时也是对项目最好的支持,欢迎加 QQ群 973170278 进行技术讨论、咨询和建议。
+如需关注项目最新动态，请Watch、Star项目，欢迎加QQ群 973170278 进行技术讨论、咨询和建议。
 

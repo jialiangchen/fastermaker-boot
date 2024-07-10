@@ -73,7 +73,7 @@ public class SysDeptController {
     }
 
     @Operation(summary = "修改部门")
-    @PostMapping(value = "/update")
+    @PutMapping(value = "/update")
     @PreAuthorize("@permission.hasPerm('sys:dept:update')")
     @LogAnnotation( value = "修改部门",module = LogModuleEnum.DEPT)
     public Result update(
@@ -84,7 +84,7 @@ public class SysDeptController {
     }
 
     @Operation(summary = "删除部门")
-    @GetMapping("/delete/{ids}")
+    @DeleteMapping("/delete/{ids}")
     @PreAuthorize("@permission.hasPerm('sys:dept:delete')")
     @LogAnnotation( value = "删除部门",module = LogModuleEnum.DEPT)
     public Result delete(

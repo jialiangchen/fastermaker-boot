@@ -76,7 +76,7 @@ public class SysDictController {
     }
 
     @Operation(summary = "修改字典")
-    @PostMapping("/update")
+    @PutMapping("/update")
     @PreAuthorize("@permission.hasPerm('sys:dict:update')")
     @LogAnnotation( value = "修改字典",module = LogModuleEnum.DICT)
     public Result update(
@@ -87,7 +87,7 @@ public class SysDictController {
     }
 
     @Operation(summary = "删除字典")
-    @GetMapping("/delete/{ids}")
+    @DeleteMapping("/delete/{ids}")
     @PreAuthorize("@permission.hasPerm('sys:dict:delete')")
     @LogAnnotation( value = "删除字典",module = LogModuleEnum.DICT)
     public Result delete(

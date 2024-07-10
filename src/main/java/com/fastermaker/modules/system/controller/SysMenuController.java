@@ -83,7 +83,7 @@ public class SysMenuController {
     }
 
     @Operation(summary = "修改菜单")
-    @PostMapping(value = "/update")
+    @PutMapping(value = "/update")
     @PreAuthorize("@permission.hasPerm('sys:menu:update')")
     @LogAnnotation( value = "修改菜单",module = LogModuleEnum.MENU)
     public Result update(
@@ -94,7 +94,7 @@ public class SysMenuController {
     }
 
     @Operation(summary = "删除菜单")
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("@permission.hasPerm('sys:menu:delete')")
     @LogAnnotation( value = "删除菜单",module = LogModuleEnum.MENU)
     public Result delete(
@@ -105,7 +105,7 @@ public class SysMenuController {
     }
 
     @Operation(summary = "修改菜单显示状态")
-    @GetMapping("/updateMenuVisible")
+    @PutMapping("/updateMenuVisible")
     @LogAnnotation( value = "修改菜单显示状态",module = LogModuleEnum.MENU)
     public Result updateMenuVisible(
             @Parameter(description = "菜单ID") @RequestParam Long menuId,

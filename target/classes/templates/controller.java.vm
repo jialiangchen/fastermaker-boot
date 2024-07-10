@@ -70,7 +70,7 @@ public class ${table.controllerName} {
         }
 
         @Operation(summary = "修改$!{table.comment}")
-        @PostMapping(value = "/update")
+        @PutMapping(value = "/update")
         @PreAuthorize("@permission.hasPerm('${module}:${firstCharLowerCaseEntity}:update')")
         @LogAnnotation( value = "修改$!{table.comment}",module = LogModuleEnum.OTHER)
         public Result update(@RequestBody @Validated(UpdateGroup.class) ${entity}Form formData) {
@@ -79,7 +79,7 @@ public class ${table.controllerName} {
         }
 
         @Operation(summary = "删除$!{table.comment}")
-        @GetMapping("/delete/{ids}")
+        @DeleteMapping("/delete/{ids}")
         @PreAuthorize("@permission.hasPerm('${module}:${firstCharLowerCaseEntity}:delete')")
         @LogAnnotation( value = "删除$!{table.comment}",module = LogModuleEnum.OTHER)
         public Result delete(@Parameter(description = "$!{table.comment}ID，多个以英文逗号(,)分割") @PathVariable String ids) {

@@ -54,7 +54,7 @@ class ${entity}API {
     static update(data: ${entity}Form) {
         return request({
             url: `${${upperCaseEntity}_BASE_URL}/update`,
-            method: "post",
+            method: "put",
             data: data,
         });
     }
@@ -68,7 +68,7 @@ class ${entity}API {
     static delete(ids: string) {
         return request({
             url: `${${upperCaseEntity}_BASE_URL}/delete/${ids}`,
-            method: "get",
+            method: "delete",
         });
     }
 }

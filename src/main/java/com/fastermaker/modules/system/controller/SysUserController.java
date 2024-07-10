@@ -66,7 +66,7 @@ public class SysUserController {
     }
 
     @Operation(summary = "修改用户")
-    @PostMapping(value = "/update")
+    @PutMapping(value = "/update")
     @PreAuthorize("@permission.hasPerm('sys:user:update')")
     @LogAnnotation( value = "修改用户",module = LogModuleEnum.USER)
     public Result update(
@@ -76,7 +76,7 @@ public class SysUserController {
     }
 
     @Operation(summary = "删除用户")
-    @GetMapping("/delete/{ids}")
+    @DeleteMapping("/delete/{ids}")
     @PreAuthorize("@permission.hasPerm('sys:user:delete')")
     @LogAnnotation( value = "删除用户",module = LogModuleEnum.USER)
     public Result delete(
@@ -87,7 +87,7 @@ public class SysUserController {
     }
 
     @Operation(summary = "修改用户密码")
-    @PostMapping(value = "/updatePassword")
+    @PutMapping(value = "/updatePassword")
     @PreAuthorize("@permission.hasPerm('sys:user:password:reset')")
     @LogAnnotation( value = "修改用户密码",module = LogModuleEnum.USER)
     public Result updatePassword(
@@ -99,7 +99,7 @@ public class SysUserController {
     }
 
     @Operation(summary = "修改用户状态")
-    @PostMapping(value = "/updateStatus")
+    @PutMapping(value = "/updateStatus")
     @LogAnnotation( value = "修改用户状态",module = LogModuleEnum.USER)
     public Result updateStatus(
             @Parameter(description = "用户ID") @RequestParam Long userId,

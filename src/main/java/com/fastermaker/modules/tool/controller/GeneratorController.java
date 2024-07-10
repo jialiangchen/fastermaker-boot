@@ -68,7 +68,7 @@ public class GeneratorController {
     }
 
     @Operation(summary = "修改代码生成")
-    @PostMapping(value = "/update")
+    @PutMapping(value = "/update")
     @PreAuthorize("@permission.hasPerm('tool:generator:update')")
     @LogAnnotation( value = "修改代码生成",module = LogModuleEnum.OTHER)
     public Result update(@RequestBody @Validated(UpdateGroup.class) GeneratorForm formData) {
@@ -77,7 +77,7 @@ public class GeneratorController {
     }
 
     @Operation(summary = "删除代码生成")
-    @GetMapping("/delete/{ids}")
+    @DeleteMapping("/delete/{ids}")
     @PreAuthorize("@permission.hasPerm('tool:generator:delete')")
     @LogAnnotation( value = "删除代码生成",module = LogModuleEnum.OTHER)
     public Result delete(@Parameter(description = "代码生成ID，多个以英文逗号(,)分割") @PathVariable String ids) {

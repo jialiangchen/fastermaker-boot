@@ -77,7 +77,7 @@ public class SysRoleController {
     }
 
     @Operation(summary = "修改角色")
-    @PostMapping(value = "/update")
+    @PutMapping(value = "/update")
     @PreAuthorize("@permission.hasPerm('sys:role:update')")
     @LogAnnotation( value = "修改角色",module = LogModuleEnum.ROLE)
     public Result update( @Validated(UpdateGroup.class) @RequestBody RoleForm roleForm) {
@@ -86,7 +86,7 @@ public class SysRoleController {
     }
 
     @Operation(summary = "删除角色")
-    @GetMapping("/delete/{ids}")
+    @DeleteMapping("/delete/{ids}")
     @PreAuthorize("@permission.hasPerm('sys:role:delete')")
     @LogAnnotation( value = "删除角色",module = LogModuleEnum.ROLE)
     public Result delete(
@@ -97,7 +97,7 @@ public class SysRoleController {
     }
 
     @Operation(summary = "修改角色状态")
-    @GetMapping(value = "/updateStatus")
+    @PutMapping(value = "/updateStatus")
     @LogAnnotation( value = "修改角色状态",module = LogModuleEnum.ROLE)
     public Result updateStatus(
             @Parameter(description = "角色ID") @RequestParam Long roleId,
@@ -118,7 +118,7 @@ public class SysRoleController {
     }
 
     @Operation(summary = "分配菜单(包括按钮权限)给角色")
-    @PostMapping("/updateRoleMenus/{roleId}")
+    @PutMapping("/updateRoleMenus/{roleId}")
     @LogAnnotation( value = "分配菜单(包括按钮权限)给角色",module = LogModuleEnum.ROLE)
     public Result updateRoleMenus(
             @PathVariable Long roleId,
